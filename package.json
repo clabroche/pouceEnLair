@@ -1,0 +1,32 @@
+{
+  "name": "spot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "serve": "cd angular && ng serve",
+    "start": "node index.js",
+    "dev": "concurrently --kill-others \"npm run build\" \"nodemon app.js  --ignore 'save.json'\"",
+    "ng": "cd angular && ng",
+    "build": "cd angular && ng build --watch",
+    "test": "cd angular && ng test",
+    "lint": "cd angular && ng lint",
+    "e2e": "cd angular && ng e2e"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bluebird": "^3.5.2",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "fs-extra": "^7.0.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
+  },
+  "devDependencies": {
+    "concurrently": "^4.0.1",
+    "nodemon": "^1.18.4"
+  }
+}

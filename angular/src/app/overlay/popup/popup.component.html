@@ -1,0 +1,25 @@
+<div class="host {{direction}} {{ghost ? 'ghost' : ''}}" (click)="close($event)" [@openState]="state" #host>
+  <div class="host-container" *ngIf="_open" [ngStyle]="{width:width, height:height}" (click)="stopPropagation($event)" #hostContainer>
+    <div class="host-title" #titleRef>
+      <div *ngIf='title;else titleTemplateContainer'>
+        {{title}}
+      </div>
+      <ng-template #titleTemplateContainer>
+        <ng-container [ngTemplateOutlet]="titleTemplate?.templateRef"></ng-container>
+      </ng-template>
+      <div class="close" (click)="out(false)">x</div>
+    </div>
+    <div class="host-body">
+      <div *ngIf='body;else bodyTemplateContainer'>
+        {{body}}
+      </div>
+      <ng-template #bodyTemplateContainer>
+        <ng-container [ngTemplateOutlet]="bodyTemplate?.templateRef"></ng-container>
+      </ng-template>
+    </div>
+    <div class="host-actions" *ngIf='!noActions'>
+      <button class="host-action host-cancel" (click)="out(false)">{{cancelButton}}</button>
+      <button class="host-action host-ok" [ngClass]="{'host-disable': form?.invalid}" [disabled]="form?.invalid" (click)="out(true)">{{validateButton}}</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+<div id="playlist">
+  <div class="header">
+    <h3>Playlist: {{playlist?.name}}</h3>
+    <div class="filter">
+      <input type="text" placeholder="Filtrer les chansons" (keyup)="updateFilter($event.target.value)">
+    </div>
+  </div>
+  <input type="text" (change)='addCriterion($event.target.value)' placeholder="Ajouter un critère à la liste" >
+  <div class="best">
+    <div class="bestItem" *ngFor="let bestPoll of bestPolls">
+      <div class="pollItem">
+        {{bestPoll.name}}
+      </div>
+      <div *ngFor="let item of bestPoll.poll; let i = index" class="tableItem">
+      <b>{{i+1}}</b> - {{item.track.title}}
+      </div>
+    </div>
+  </div>
+
+  <div class="tracks tableItem" *ngFor="let track of playlist?.tracks | custom: filterFun" (click)="vote(track)">
+    <a class="cover" [href]="track.href" target="_blank">
+      <img [src]="track.cover" alt="">
+    </a>
+    <div class="description">
+      <div class="album_artist">
+        <div class="artist">
+          <i class="fas fa-music"></i>
+          {{ track.title}}
+        </div>
+      </div>
+      <div class="album">
+        <i class="fas fa-compact-disc"></i>
+        {{ track.album}}
+      </div>
+      <div class="title">
+        <i class="fas fa-user"></i>
+        {{ track.artist}}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<clt-popup #votePopup [noActions]="true">
+  <div *clt-popup-title>
+    {{votePopup.context.title}}
+  </div>
+  <div *clt-popup-body>
+    <div class="actions">
+      <div *ngIf='votePopup.context.added_by !== spotify.me.id '>
+        <button class="pollItem" (click)="voteFor(votePopup.context, criterion.id)" [ngClass]="{'disabled': getPollFor(id,votePopup.context.id,criterion.id)}"
+          *ngFor='let criterion of criterions'>
+                {{criterion.name}}
+              </button>
+      </div>
+      <div *ngIf='votePopup.context.added_by === spotify.me.id '>
+        On ne vote pas pour sa propre chanson ! 
+      </div>
+    </div>
+  </div>
+</clt-popup>

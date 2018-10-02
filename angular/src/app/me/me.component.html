@@ -1,0 +1,4 @@
+<a id="me" [href]="me?.external_urls?.spotify || '#'">
+  <img id="me_img"  [src]="me?.images[0]?.url" alt="me">
+  <h2 id="me_name">{{me?.display_name}}</h2>
+</a>

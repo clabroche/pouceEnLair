@@ -1,0 +1,6 @@
+<div id="playlists">
+  <h3>Playlists</h3>
+  <div class='tableItem' id="playlist" *ngFor="let playlist of playlists?.items" (click)="selectPlaylist(playlist)" [title]="playlist.name">
+    {{ playlist.name}}
+  </div>
+</div>

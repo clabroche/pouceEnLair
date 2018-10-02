@@ -1,0 +1,31 @@
+/* You can add global styles to this file, and also import other style files */
+body, html {
+  margin: 0;
+  background-color: #21313a;
+  color: white;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h3 {
+  margin: 0
+}
+
+.tableItem {
+  border-bottom: 1px solid #bdbdbd;
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+:root {
+  --headerBgColor: #21313a;
+  --headerBorderWidth: 0;
+  --headerTextColor: white;
+  --headerFontWeight: bold;
+  --headerIconText: #21313a;
+  --headerBgColorAccent: #21313a;
+  --stateHoverBgColor: #21313a;
+}

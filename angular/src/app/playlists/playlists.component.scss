@@ -1,0 +1,25 @@
+#playlists {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 10px;
+  background-color: #2b3942;
+  h3 {
+    margin: 0;
+  }
+  .tableItem{
+    cursor: pointer;
+  }
+  #playlist {
+    color: #bdbdbd;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 5px;
+    padding: 10px;
+    #selected {
+      color: white;
+    }
+  }
+}
