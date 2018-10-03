@@ -9,6 +9,8 @@ import { PlaylistComponent } from './playlist/playlist.component';
 import { CustomPipe } from './pipes/custom.pipe';
 import { CltOverlayModule } from './overlay/overlay.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AudioService } from './providers/audio.service';
+import { AudioPlayerComponent } from './audio-player/audio-player.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MeComponent,
     PlaylistsComponent,
     PlaylistComponent,
-    CustomPipe
+    CustomPipe,
+    AudioPlayerComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +27,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserAnimationsModule
   ],
   providers: [
-    SpotifyService
+    SpotifyService,
+    AudioService
   ],
   bootstrap: [AppComponent]
 })

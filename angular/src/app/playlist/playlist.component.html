@@ -1,40 +1,59 @@
 <div id="playlist">
   <div class="header">
-    <h3>Playlist: {{playlist?.name}}</h3>
+    <h3>{{playlist?.name}}</h3>
     <div class="filter">
       <input type="text" placeholder="Filtrer les chansons" (keyup)="updateFilter($event.target.value)">
     </div>
   </div>
-  <input type="text" (change)='addCriterion($event.target.value)' placeholder="Ajouter un critère à la liste" >
+  <!-- <input type="text" (change)='addCriterion($event.target.value)' placeholder="Ajouter un critère à la liste" > -->
   <div class="best">
     <div class="bestItem" *ngFor="let bestPoll of bestPolls">
-      <div class="pollItem">
-        {{bestPoll.name}}
+      <div class="pollItem" (click)="bestPoll.hide = !bestPoll.hide">
+        <div>{{bestPoll.name}}</div>
+        <i class="fas fa-angle-{{bestPoll.hide ? 'right' : 'down'}}"></i>
       </div>
-      <div *ngFor="let item of bestPoll.poll; let i = index" class="tableItem">
-      <b>{{i+1}}</b> - {{item.track.title}}
+      <div class="pollContainer" [ngStyle]="{display: bestPoll.hide ? 'none' : 'inherit'}">
+        <div *ngFor="let item of bestPoll.poll; let i = index" class="tableItem">
+          <div class="cover">
+            <img [src]="item.track.cover" alt="cover">
+          </div>
+          <div class="description">
+            <div class="position">Position n°{{i+1}} <span class="strength">({{item.strength}} vote)</span></div>
+            <div class="title">
+              {{item.track.title}}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-
-  <div class="tracks tableItem" *ngFor="let track of playlist?.tracks | custom: filterFun" (click)="vote(track)">
-    <a class="cover" [href]="track.href" target="_blank">
-      <img [src]="track.cover" alt="">
-    </a>
-    <div class="description">
-      <div class="album_artist">
-        <div class="artist">
-          <i class="fas fa-music"></i>
-          {{ track.title}}
+  <div class="tracksContainer">
+    <div class="tracks tableItem" *ngFor="let track of playlist?.tracks | custom: filterFun" (click)="vote(track)">
+      <div class="cover" (click)="audio.play(track); $event.stopPropagation()">
+        <div class="overlay  {{track === audio.currentTrack ? audio.audioElement.paused ? 'pause' : 'play' : ''}} {{!track.preview ? 'noPreview' : ''}}">
+          <img [src]="track.cover" alt="">
         </div>
       </div>
-      <div class="album">
-        <i class="fas fa-compact-disc"></i>
-        {{ track.album}}
+      <div class="description">
+        <div class="album_artist">
+          <div class="artist">
+            <i class="fas fa-music"></i>
+            {{ track.title}}
+          </div>
+        </div>
+        <div class="album">
+          <i class="fas fa-compact-disc"></i>
+          {{ track.album}}
+        </div>
+        <div class="title">
+          <i class="fas fa-user"></i>
+          {{ track.artist}}
+        </div>
       </div>
-      <div class="title">
-        <i class="fas fa-user"></i>
-        {{ track.artist}}
+      <div class="added_by">
+        <div class="cover_user" [title]="track.added_by_user.display_name || track.added_by">
+          <img [src]="track.added_by_user.images[0]?.url || 'https://www.chaarat.com/wp-content/uploads/2017/08/placeholder-user.png'" alt="">
+        </div>
       </div>
     </div>
   </div>

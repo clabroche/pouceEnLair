@@ -5,6 +5,7 @@ import bluebird from 'bluebird';
   providedIn: 'root'
 })
 export class SpotifyService {
+  attempt = 0;
   me: {
     id: string
     external_urls: {
@@ -23,16 +24,22 @@ export class SpotifyService {
     return this.me;
   }
 
-  spotify(url) {
+  async spotify(url) {
+    if (this.attempt === 10) { return; }
+    this.attempt ++;
     return axios({
       url,
       headers: {
         Authorization: `Bearer ${this.apiKey}`
       }
-    }).then(obj => obj.data).catch(async err => {
+    }).then(obj => obj.data)
+      .catch(async err => {
       if (err.response.status) {
         await this.login();
-        return this.spotify(url);
+        return this.spotify(url).then(data => {
+          this.attempt = 0;
+          return data;
+        });
       }
       return Promise.reject(err);
     });

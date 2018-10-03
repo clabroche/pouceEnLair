@@ -4,6 +4,7 @@ import { CltPopupComponent } from '../overlay/popup/popup.component';
 import axios from 'axios';
 import bluebird from 'bluebird';
 import fastsort from 'fast-sort';
+import { AudioService } from '../providers/audio.service';
 @Component({
   selector: 'playlist',
   templateUrl: './playlist.component.html',
@@ -23,7 +24,7 @@ export class PlaylistComponent implements OnInit, OnChanges {
   ];
   @ViewChild('votePopup') votePopup: CltPopupComponent;
   filterFun = data => data;
-  constructor(public spotify: SpotifyService) {
+  constructor(public spotify: SpotifyService, public audio: AudioService) {
   }
   ngOnInit() {
   }
@@ -38,16 +39,20 @@ export class PlaylistComponent implements OnInit, OnChanges {
     this.id = changes.playlist.currentValue.id;
     this.bestPolls = [];
     await bluebird.map(changes.playlist.currentValue.tracks.items, async trackData => {
+      const image = trackData.track.album.images.pop(); // lower resolution
       return {
         added_by: trackData.added_by.id,
+        added_by_user: (await axios.get(trackData.added_by.href, {
+          headers: {
+            Authorization: `Bearer ${this.spotify.apiKey}`
+          }})).data,
         artist: trackData.track.artists.map(track => track.name).join(','),
         id: trackData.track.id,
         href: trackData.track.external_urls.spotify,
         album: trackData.track.album.name,
         title: trackData.track.name,
-        cover: trackData.track.album.images[0] ?
-          trackData.track.album.images[0].url :
-          'https://s.mxmcdn.net/site/images/album-placeholder.png',
+        preview: trackData.track.preview_url,
+        cover: image ? image.url : 'https://s.mxmcdn.net/site/images/album-placeholder.png',
       };
     }).then(data => {
       changes.playlist.currentValue.tracks = data;
@@ -70,7 +75,7 @@ export class PlaylistComponent implements OnInit, OnChanges {
   }
 
   async voteFor(track, criterion) {
-    const trackDataResult = await axios({
+    await axios({
       method: 'POST',
       url: `/vote`,
       data: {
@@ -101,10 +106,11 @@ export class PlaylistComponent implements OnInit, OnChanges {
     this.bestPolls = Object.keys(originals).map(criterion => {
       return {
         name: this.criterions.filter(_criterion => criterion === _criterion.id).pop().name,
-        poll: fastsort(originals[criterion], 'strength').desc()
+        hide: true,
+        poll: fastsort(originals[criterion]).desc('strength')
       };
     });
-    this.bestPolls = fastsort(this.bestPolls, 'name').asc();
+    this.bestPolls = fastsort(this.bestPolls).asc('name');
   }
 
   getPollFor(plylistId, musicId, criterion) {
@@ -119,17 +125,16 @@ export class PlaylistComponent implements OnInit, OnChanges {
   }
 
   async addCriterion(value) {
-    if(value) {
+    if (value) {
       await axios({
         method: 'POST',
         url: `/addCriterion`,
         data: {
           criterion: value
         },
-      }).then(json=>{
+      }).then(json => {
         this.criterions = json.data.criterions;
-        console.log(json)
-      }).catch(err=>console.log(err));
+      }).catch(console.error);
     }
   }
 }

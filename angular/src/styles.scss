@@ -10,11 +10,12 @@ body, html {
 }
 
 h3 {
-  margin: 0
+  margin: 0;
+  font-size: 1.5rem
 }
 
 .tableItem {
-  border-bottom: 1px solid #bdbdbd;
+  border-bottom: 1px solid #e2e2e2;
   &:last-child {
     border-bottom: none;
   }

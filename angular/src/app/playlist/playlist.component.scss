@@ -4,10 +4,19 @@
   display: flex;
   flex-direction: column;
   margin: 10px;
+  .filter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    input {
+      padding: 5px;
+    }
+  }
   .header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+    font-size: 2em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
   .tracks{
     display: flex;
@@ -24,11 +33,44 @@
       color: #909090;
       font-size: 0.8em;
     }
+    .added_by {
+      flex-grow: 1;
+      text-align: right;
+      flex-shrink: 0;
+      .cover_user {
+        height: 60px;
+        img{
+          height: 100%;;
+        }
+      }
+    }
     .cover{
+      position: relative;
       height: 100%;
+      .overlay {
+        &.play::before,
+        &.pause::before,
+        &:hover::before {
+          content:'';
+          font-family: "Font Awesome 5 Free";
+          font-weight: 900;
+          background-color: rgba(0,0,0,0.5);
+          width: 75px;
+          height: 75px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 2em;
+          position: absolute;
+        }
+        &:hover::before {content: "\f028";}
+        &.noPreview:hover::before {content: "\f057";}
+        &.play::before {content: "\f04c";}
+        &.pause::before {content: "\f04b";}
+      }
       img{
         height: 75px;
-        width: auto;
+        width: 75px;
         margin-right: 10px;
       }
     }
@@ -42,6 +84,8 @@
     &.disabled {
       color: graytext
     }
+    margin: 10px;
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -54,25 +98,60 @@
   }
 }
 
+.tracksContainer {
+  .tableItem {
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+    }
+  }
+}
 .best {
       display: flex;
       flex-flow: wrap;
       justify-content: space-between;
       margin-top: 25px;
       margin-bottom: 25px;
+      align-items: flex-start;
       .bestItem {
-        width: 45%;
+        width: 49%;
         margin-bottom: 10px;
         background-color: rgba(255, 255, 255, 0.05);
         padding: 10px;
         .pollItem {
           text-align: center;
-          font-size: 1.5em;
           padding: 15px;
+          font-weight: bold;
+          display: flex;
+          justify-content: space-between; 
+          &:hover {
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.1);
+          }
         }
         .tableItem {
+          overflow: hidden;
           padding-top:5px;
           padding-bottom:5px;
+          height: 50px;
+          display: flex;
+          .position {
+            font-weight: bold;
+            .strength {
+              font-size: 0.9em;
+              color: rgba(255,255,255,0.5)
+            }
+          }
+          .title {
+            white-space: nowrap;
+          }
+          .cover {
+            margin-right:10px;
+            height: 100%;
+            img {
+              height: 100%;;
+            }
+          }
         }
       }
 }

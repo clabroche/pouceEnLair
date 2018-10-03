@@ -9,6 +9,7 @@
     "dev": "concurrently --kill-others \"npm run build\" \"nodemon app.js  --ignore 'save.json'\"",
     "ng": "cd angular && ng",
     "build": "cd angular && ng build --watch",
+    "prod": "cd angular && ng build --prod",
     "test": "cd angular && ng test",
     "lint": "cd angular && ng lint",
     "e2e": "cd angular && ng e2e"
