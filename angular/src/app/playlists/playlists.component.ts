@@ -19,8 +19,8 @@ export class PlaylistsComponent implements OnInit {
     this.playlistChange.emit(playlist);
   }
   async searchPlaylist(url) {
-    const playlist = await this.spotify.getPlaylist(url)
-    this.playlists.items.push(playlist)
+    const playlist = await this.spotify.getPlaylist(url);
+    this.playlists.items.push(playlist);
     this.playlistChange.emit(playlist);
   }
 }
