@@ -48,7 +48,7 @@ export class PlaylistComponent implements OnChanges {
         added_by_user: (await axios.get(trackData.added_by.href, {
           headers: {
             Authorization: `Bearer ${this.spotify.apiKey}`
-          }}).catch(err => ({data: undefined; }))).data,
+          }}).catch(err => ({data: undefined}))).data,
         artist: trackData.track.artists.map(track => track.name).join(','),
         id: trackData.track.id,
         href: trackData.track.external_urls.spotify,
