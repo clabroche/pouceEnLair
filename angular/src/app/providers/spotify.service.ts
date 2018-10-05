@@ -25,16 +25,17 @@ export class SpotifyService {
   }
 
   async spotify(url) {
-    if (this.attempt === 10) { return; }
+    console.log(this.attempt)
+    if (this.attempt === 100) { return; }
     this.attempt ++;
     return axios({
       url,
       headers: {
         Authorization: `Bearer ${this.apiKey}`
       }
-    }).then(obj => obj.data)
+    }).then(obj => obj.data || obj)
       .catch(async err => {
-      if (err.response.status) {
+      if (err.response.status === 401) {
         await this.login();
         return this.spotify(url).then(data => {
           this.attempt = 0;
@@ -67,6 +68,10 @@ login() {
       return playlist;
     });
     return playlists;
+  }
+
+  getPlaylist(url) {
+    return  this.spotify(`https://api.spotify.com/v1/playlists/${url}`);
   }
 
 }

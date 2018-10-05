@@ -15,48 +15,44 @@
       <div class="pollContainer" [ngStyle]="{display: bestPoll.hide ? 'none' : 'inherit'}">
         <div *ngFor="let item of bestPoll.poll; let i = index" class="tableItem">
           <div class="cover">
-            <img [src]="item.track.cover" alt="cover">
+            <img [src]="item.track?.cover" alt="cover">
           </div>
           <div class="description">
             <div class="position">Position n°{{i+1}} <span class="strength">({{item.strength}} vote)</span></div>
             <div class="title">
-              {{item.track.title}}
+              {{item.track?.title}}
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="tracksContainer">
-    <div class="tracks tableItem" *ngFor="let track of playlist?.tracks | custom: filterFun" (click)="vote(track)">
-      <div class="cover" (click)="audio.play(track); $event.stopPropagation()">
+
+  <table>
+    <tr>
+      <th></th>
+      <th>Titre</th>
+      <th>Album</th>
+      <th>Artiste</th>
+      <th>Added_by</th>
+    </tr>
+    <tr *ngFor="let track of playlist.tracks | custom: filterFun" (click)="vote(track)">
+      <td class="cover" (click)="audio.play(track); $event.stopPropagation()">
         <div class="overlay  {{track === audio.currentTrack ? audio.audioElement.paused ? 'pause' : 'play' : ''}} {{!track.preview ? 'noPreview' : ''}}">
           <img [src]="track.cover" alt="">
         </div>
-      </div>
-      <div class="description">
-        <div class="album_artist">
-          <div class="artist">
-            <i class="fas fa-music"></i>
-            {{ track.title}}
-          </div>
+      </td>
+      <td>{{ track.title}}</td>
+      <td>{{ track.album}}</td>
+      <td>{{ track.artist}}</td>
+      <td class="added_by">
+        <div class="cover_user" [title]="track.added_by_user?.display_name || track.added_by">
+          <img [src]="track.added_by_user?.images[0]?.url || 'https://www.chaarat.com/wp-content/uploads/2017/08/placeholder-user.png'"
+            alt="">
         </div>
-        <div class="album">
-          <i class="fas fa-compact-disc"></i>
-          {{ track.album}}
-        </div>
-        <div class="title">
-          <i class="fas fa-user"></i>
-          {{ track.artist}}
-        </div>
-      </div>
-      <div class="added_by">
-        <div class="cover_user" [title]="track.added_by_user.display_name || track.added_by">
-          <img [src]="track.added_by_user.images[0]?.url || 'https://www.chaarat.com/wp-content/uploads/2017/08/placeholder-user.png'" alt="">
-        </div>
-      </div>
-    </div>
-  </div>
+      </td>
+    </tr>
+  </table>
 </div>
 
 

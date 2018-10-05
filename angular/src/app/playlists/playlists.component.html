@@ -3,4 +3,5 @@
   <div class='tableItem' id="playlist" *ngFor="let playlist of playlists?.items" (click)="selectPlaylist(playlist)" [title]="playlist.name">
     {{ playlist.name}}
   </div>
+  <input type="text" placeholder="Tapez l'id d'une playlist pour l'ajouter"  (change)="searchPlaylist($event.target.value)">
 </div>

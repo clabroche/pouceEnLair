@@ -1,9 +1,8 @@
 #playlist {
-  background-color: #2b3942;
+  background-color: #20282d ;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  margin: 10px;
   .filter {
     display: flex;
     align-items: center;
@@ -18,31 +17,9 @@
     align-items: center;
     justify-content: space-between;
   }
-  .tracks{
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    i {
-      width: 1.5rem;
-    }
-    .artist {
-      font-size: 1.3em;
-      font-weight: bold;
-    }
-    .album {
-      color: #909090;
-      font-size: 0.8em;
-    }
-    .added_by {
-      flex-grow: 1;
+  table {
+    .cover_user {
       text-align: right;
-      flex-shrink: 0;
-      .cover_user {
-        height: 60px;
-        img{
-          height: 100%;;
-        }
-      }
     }
     .cover{
       position: relative;
@@ -55,8 +32,8 @@
           font-family: "Font Awesome 5 Free";
           font-weight: 900;
           background-color: rgba(0,0,0,0.5);
-          width: 75px;
-          height: 75px;
+          width: 35px;
+          height: 35px;
           display: flex;
           justify-content: center;
           align-items: center;
@@ -68,11 +45,15 @@
         &.play::before {content: "\f04c";}
         &.pause::before {content: "\f04b";}
       }
-      img{
-        height: 75px;
-        width: 75px;
-        margin-right: 10px;
-      }
+    }
+    img{
+      height: 35px;
+      width: 35px;
+      margin-right: 10px;
+    }
+    td,th  {
+      border-bottom: 1px solid #4e4e4e;
+      text-align: left;
     }
   }
 }
@@ -120,7 +101,7 @@
         padding: 10px;
         .pollItem {
           text-align: center;
-          padding: 15px;
+          padding: 5px;
           font-weight: bold;
           display: flex;
           justify-content: space-between; 

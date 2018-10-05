@@ -10,8 +10,8 @@ import { AudioService } from '../providers/audio.service';
   templateUrl: './playlist.component.html',
   styleUrls: ['./playlist.component.scss']
 })
-export class PlaylistComponent implements OnInit, OnChanges {
-  @Input() playlist;
+export class PlaylistComponent implements OnChanges {
+  @Input() playlist: any = {tracks: []};
   poll;
   id;
   bestPolls = [];
@@ -24,10 +24,7 @@ export class PlaylistComponent implements OnInit, OnChanges {
   ];
   @ViewChild('votePopup') votePopup: CltPopupComponent;
   filterFun = data => data;
-  constructor(public spotify: SpotifyService, public audio: AudioService) {
-  }
-  ngOnInit() {
-  }
+  constructor(public spotify: SpotifyService, public audio: AudioService) { }
 
   async getPoll() {
     this.poll = (await axios.get('/trackdata')).data.vote;
@@ -35,9 +32,15 @@ export class PlaylistComponent implements OnInit, OnChanges {
     this.getBest();
   }
   async ngOnChanges(changes: SimpleChanges) {
+    this.playlist = {tracks: []};
+    this.bestPolls = [];
     if (!changes.playlist.currentValue) { return; }
     this.id = changes.playlist.currentValue.id;
-    this.bestPolls = [];
+    if (Array.isArray(changes.playlist.currentValue.tracks)) {
+      this.playlist = changes.playlist.currentValue;
+      this.getPoll();
+      return changes.playlist.currentValue.tracks;
+    }
     await bluebird.map(changes.playlist.currentValue.tracks.items, async trackData => {
       const image = trackData.track.album.images.pop(); // lower resolution
       return {
@@ -45,7 +48,7 @@ export class PlaylistComponent implements OnInit, OnChanges {
         added_by_user: (await axios.get(trackData.added_by.href, {
           headers: {
             Authorization: `Bearer ${this.spotify.apiKey}`
-          }})).data,
+          }}).catch(err => ({data: undefined; }))).data,
         artist: trackData.track.artists.map(track => track.name).join(','),
         id: trackData.track.id,
         href: trackData.track.external_urls.spotify,
@@ -56,7 +59,8 @@ export class PlaylistComponent implements OnInit, OnChanges {
       };
     }).then(data => {
       changes.playlist.currentValue.tracks = data;
-      this.playlist = Object.assign({}, changes.playlist.currentValue);
+      this.playlist.tracks = changes.playlist.currentValue.tracks;
+      this.playlist.name = changes.playlist.currentValue.name;
       this.getPoll();
       return data;
     });
@@ -91,6 +95,7 @@ export class PlaylistComponent implements OnInit, OnChanges {
     if (!this.poll) { return '--'; }
     const playlistPoll = this.poll[this.id];
     const originals = {};
+    if (!playlistPoll) { return; }
     Object.keys(playlistPoll).map(songId => {
       Object.keys(playlistPoll[songId]).map(criterion => {
         if (playlistPoll[songId][criterion].length) {
